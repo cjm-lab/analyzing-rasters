@@ -23,7 +23,7 @@ savedFilename = Filename + ".npy"
 if os.path.exists(savedFilename): # no need to read in data again
     rasters = np.load(savedFilename)
 else:  # Read in data first and save to file in format that's faster to read next time
-    if ((rasterFilename[len(rasterFilename)-3:len(rasterFilename)])!="grr"):
+    if ((rasterFilename[-3:])!="grr"):
         data = np.fromfile(rasterFilename,dtype=np.int16)
     else:
         data = np.fromfile(rasterFilename,dtype=np.int32)
@@ -41,7 +41,7 @@ else:  # Read in data first and save to file in format that's faster to read nex
         else:
             if data[counter]<numNeurons:
                 if rowCounter[data[counter],trial]<maxSpikesPerTrial:
-                    rasters[data[counter],trial, rowCounter[data[counter],trial]] = bin
+                    rasters[data[counter], trial, rowCounter[data[counter],trial]] = bin
                     rowCounter[data[counter],trial]+=1
         counter += 1
         if trial >= numTrials-1:
