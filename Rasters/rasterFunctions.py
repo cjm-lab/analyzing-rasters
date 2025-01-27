@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from joblib import Parallel, delayed
 
 def determineCellType(File):
     cellType = (File[len(File)-3:len(File)])
@@ -23,7 +22,7 @@ def determineCellType(File):
     return cellType, numNeurons
 
 
-def splitRasterToTrials (raster):
+def split_raster_to_trials (raster):
     # using list because faster dynamic resizing
     # casted as np array for output
     bytrial_array = [] # final output
@@ -46,7 +45,7 @@ def splitRasterToTrials (raster):
     return bytrial_array
 
 
-def processTrial(trial, numNeurons, maxNumSpikes):
+def process_trial(trial, numNeurons, maxNumSpikes):
     bin = 0
     spikeCounter = [0] * numNeurons
     output_raster = np.zeros((numNeurons, maxNumSpikes), dtype=np.int32)
@@ -76,24 +75,25 @@ def processTrial(trial, numNeurons, maxNumSpikes):
     return output_raster
 
 
-# testing
-arr = np.array(
-    [-2, 0, -1, 0, 1, 2, 3, -1, 1, 4, 5, 6, 2, 1,
-     -2, 1, -1, 0, 4, 5, 6, -1, 1, 7, 8, 9, 4, 6, 1,
-     -2, 2, -1, 0, 7, 8, 9, -1, 1, 1, 2, 3, 7])
-test = splitRasterToTrials(arr)
-# Produces output of [Trial, cell, spikeBin]
-result_rasters = Parallel(n_jobs=3)(delayed(processTrial)(vec, 10, 3) for vec in test)
-result_rasters = np.array(result_rasters)
-
-print(result_rasters)
-print(result_rasters.shape)
-
-
-# TODO figure out what needs to be plotted
-for Showneuron in range(0,9):
-        plotarray = result_rasters[:,Showneuron,:]
-        plt.figure(figsize=(15, 6))
-        plt.eventplot(plotarray, colors='black', lineoffsets=1,
-                            linelengths=1)
-        plt.show()
+def plot_rasters(rasters, numNeurons, showNeuron):
+    # check if any specific neurons are requested
+    # can be single value or list of neurons
+    if showNeuron != 0:
+        for neuron in showNeuron:
+            plotarray = rasters[:,neuron,:]
+            plt.figure(figsize=(15, 6))
+            plt.eventplot(plotarray, colors='black', orientation='vertical')
+            plt.title(f"Neuron: {neuron}")
+            plt.ylabel("Timebin")
+            plt.xlabel("Trial")
+            plt.show()
+    # otherwise, plot all neurons
+    else:
+        for neuron in range(numNeurons):
+                plotarray = rasters[:,neuron,:]
+                plt.figure(figsize=(15, 6))
+                plt.eventplot(plotarray, colors='black', orientation='vertical')
+                plt.title(f"Neuron: {neuron}")
+                plt.ylabel("Timebin")
+                plt.xlabel("Trial")
+                plt.show()
