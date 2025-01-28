@@ -45,5 +45,4 @@ else:  # Read in data first and save to file in format that's faster to read nex
     total_end = time.time()
     print(f"Total Time: {total_end-total_start:.2f}s")
 # plot the rasters for each neuron, or selected neurons
-print("Plotting Rasters...")
 rf.plot_rasters(result_rasters, numNeurons, showNeuron)
