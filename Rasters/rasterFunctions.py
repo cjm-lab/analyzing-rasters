@@ -84,10 +84,10 @@ def plot_rasters(rasters, numNeurons, showNeuron):
         for neuron in showNeuron:
             plotarray = rasters[:,neuron,:]
             plt.figure(figsize=(15, 6))
-            plt.eventplot(plotarray, colors='black', orientation='vertical')
+            plt.eventplot(plotarray, colors='black', orientation='horizontal')
             plt.title(f"Neuron: {neuron}")
-            plt.ylabel("Timebin")
-            plt.xlabel("Trial")
+            plt.ylabel("Trial")
+            plt.xlabel("Timebin")
             plt.show()
     # otherwise, plot all neurons
     else:
