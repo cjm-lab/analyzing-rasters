@@ -2,11 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def determineCellType(File):
-    cellType = (File[len(File)-3:len(File)])
+    cellType = (File[-3:])
     numNeurons = 0
     if (cellType =="grr"):      # Sets numNeurons according to neuron type  
         numNeurons = 2 ** 20
         numNeurons = 4000       # Have to look at fewer granule cells because run out of memory if too many
+    elif(cellType =='gor'):
+        numNeurons = 4096
     elif (cellType =="mfr"):
         numNeurons = 4096
     elif (cellType =="ncr"):
