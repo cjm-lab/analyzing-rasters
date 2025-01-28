@@ -35,7 +35,7 @@ else:  # Read in data first and save to file in format that's faster to read nex
     split_end = time.time()
     print(f"Time: {split_end - split_start:.2f}s")
     # process each trial in parallel, put back together into 3D array by trial, neuron, spike
-    print("Analysing Trials...")
+    print("Analyzing Trials...")
     main_start = time.time()
     result_rasters = Parallel(n_jobs=-1)(delayed(rf.process_trial)(vec, numNeurons, maxSpikesPerTrial) for vec in data_byTrial)
     result_rasters = np.array(result_rasters)
