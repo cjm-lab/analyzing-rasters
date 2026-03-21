@@ -8,7 +8,7 @@ import time
 ## To do: count total spikes for each neuron first, that way we can allocate smaller arrays and
 #           in the case of granule cells we can avoid loading cells that don't fire..
 rasterFilepath = Path(input("Enter absolute filepath: "))
-saveFilepath = rasterFilepath.with_suffix('.npy')   # Name of file for strored rasters, 
+saveFilepath = str(rasterFilepath).replace(".", "_") + ".npy"   # Name of file for strored rasters, 
 showNeuron = [0,1,2]                  # Use this if you want to look at rasters for one particular neurons. = 0 defaults to view in sequence
 maxSpikesPerTrial = 5000        # This has to be larger than the most spikes any of the neurons would have in one trial
 cellType, numNeurons = rf.determineCellType(str(rasterFilepath))
