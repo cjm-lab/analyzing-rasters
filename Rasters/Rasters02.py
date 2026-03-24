@@ -10,7 +10,7 @@ import time
 rasterFilepath = Path(input("Enter absolute filepath: "))
 saveFilepath = str(rasterFilepath).replace(".", "_") + ".npy"   # Name of file for strored rasters, 
 showNeuron = [0,1,2]                  # Use this if you want to look at rasters for one particular neurons. = 0 defaults to view in sequence
-maxSpikesPerTrial = 5000        # This has to be larger than the most spikes any of the neurons would have in one trial
+nTimebins = 5000        # This has to be larger than the most spikes any of the neurons would have in one trial
 cellType, numNeurons = rf.determineCellType(str(rasterFilepath))
 
 
@@ -30,9 +30,9 @@ if rasterFilepath.is_file():
     # process each trial in parallel, put back together into 3D array by trial, neuron, spike
     print("Analyzing Trials...")
     main_start = time.time()
-    result_rasters = Parallel(n_jobs=-1)(delayed(rf.process_trial)(vec, numNeurons, maxSpikesPerTrial) for vec in data_byTrial)
+    result_rasters = Parallel(n_jobs=-1)(delayed(rf.process_trial)(vec, numNeurons, nTimebins) for vec in data_byTrial)
     result_rasters = np.array(result_rasters)
-    print(result_rasters.shape)
+    print("Output shape: ", result_rasters.shape)
     main_end = time.time()
     print(f"Time: {main_end - main_start:.2f}s")
     print(f"Saving file to: {str(saveFilepath)}")

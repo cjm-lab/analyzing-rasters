@@ -47,10 +47,9 @@ def split_raster_to_trials (raster):
     return bytrial_array
 
 
-def process_trial(trial, numNeurons, maxNumSpikes):
+def process_trial(trial, numNeurons, nTimebins):
     bin = 0
-    spikeCounter = [0] * numNeurons
-    output_raster = np.zeros((numNeurons, maxNumSpikes), dtype=np.int32)
+    output_raster = np.zeros((numNeurons, nTimebins), dtype=np.int8)
     
     i = 0
     while i < len(trial):
@@ -58,22 +57,8 @@ def process_trial(trial, numNeurons, maxNumSpikes):
             bin = trial[i+1]
             i += 2 # skip bin num in next loop
         else:
-            # safety checks
-            if spikeCounter[trial[i]] < maxNumSpikes:
-                if output_raster[trial[i], spikeCounter[trial[i]]] == 0:
-                    # store the bin number sequntially in neuron indexed value
-                    # NOTE right now the bin number is increased by 1 for visibility at first bin
-                    output_raster[trial[i], spikeCounter[trial[i]]] = bin + 1
-                    # increment the spike counter to place in next cell for same neuron
-                    spikeCounter[trial[i]] += 1
-                    i += 1
-                else:
-                    print("""ERROR: Output raster cell double counted""")
-                    return IndexError
-            else: 
-                print("""ERROR: Neuron spiked more times than array allows,
-                        increase maxNumSpikes""")
-                return ReferenceError # not actually sure what error is appropriate
+            output_raster[trial[i], bin] = 1
+            i += 1
     return output_raster
 
 
